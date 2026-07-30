@@ -115,6 +115,8 @@ header{
   letter-spacing: 0;
   white-space: pre;
   text-shadow: 0 0 10px rgba(255,176,0,0.28);
+  transform: skewX(-10deg);
+  transform-origin: bottom left;
 }
 
 /* ---------- Contribution heatmap ---------- */
