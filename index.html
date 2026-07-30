@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daksh Singhal — Full-Stack Developer</title>
+<meta name="description" content="Daksh Singhal — Full-Stack Developer building SaaS platforms and client products.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="flicker">
+<canvas id="matrixCanvas"></canvas>
+<div class="wrap">
+
+  <header>
+    <div class="ascii-block-wrap">
+      <pre class="ascii-block" id="asciiBlockName"></pre>
+    </div>
+    <div class="tagline">Full-Stack Developer<span class="sep">·</span>B.Tech CSE<span class="sep">·</span>New Delhi, India</div>
+  </header>
+
+  <div class="terminal">
+    <div class="titlebar">
+      <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+      <span class="path" id="titlePath">daksh@github: ~</span>
+    </div>
+
+    <div class="term-body" id="termBody">
+      <!-- boot / typed content injected by script.js -->
+    </div>
+
+    <div class="term-body stats-block">
+      <div class="stats" id="statsGrid">
+        <div class="stat"><div class="num" id="statContrib">—</div><div class="lbl">Contributions</div></div>
+        <div class="stat"><div class="num" id="statStreak">—</div><div class="lbl">Day Streak</div></div>
+        <div class="stat"><div class="num" id="statBest">—</div><div class="lbl">Best Streak</div></div>
+        <div class="stat"><div class="num" id="statRepos">—</div><div class="lbl">Public Repos</div></div>
+      </div>
+
+      <div class="cmd-row">
+        <span class="prompt-user">daksh</span><span class="prompt-sep">@</span><span class="prompt-path">github</span><span class="prompt-sep">:~$</span>
+        <input id="cmdInput" type="text" autocomplete="off" spellcheck="false"
+               placeholder="type a command… try 'help'" aria-label="Terminal command input">
+      </div>
+    </div>
+  </div>
+
+  <div class="hint">
+    try <span class="k">help</span> for the full command list — <span class="k">whoami</span> <span class="k">projects</span> <span class="k">contributions</span> <span class="k">theme</span> <span class="k">matrix</span> …
+  </div>
+
+  <footer>
+    <a class="primary" href="mailto:psinghal651@gmail.com">✉ Email Me</a>
+    <a href="https://www.linkedin.com/in/daksh-singhal-178b56282/" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="https://github.com/Daksh12345-del" target="_blank" rel="noopener">GitHub</a>
+    <a href="https://github.com/Daksh12345-del/Daksh12345-del/blob/main/Daksh_Singhal_Resume.pdf" target="_blank" rel="noopener">Resume</a>
+  </footer>
+
+  <div class="refresh-note">rendered client-side · stats refresh on every visit</div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
