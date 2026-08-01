@@ -337,6 +337,23 @@
     addLine('compiling… please hold, brewing chai ☕', 'out cream');
   }
 
+  function printPhoto(){
+    addLine(promptLine('photo'));
+    addLine('loading ascii self-portrait…', 'out dim');
+    const img = document.createElement('img');
+    img.src = 'assets/portrait.svg';
+    img.alt = 'animated ascii self-portrait';
+    img.style.maxWidth = '100%';
+    img.style.borderRadius = '8px';
+    img.style.border = '1px solid var(--line)';
+    img.style.marginTop = '6px';
+    const div = document.createElement('div');
+    div.className = 'line';
+    div.appendChild(img);
+    termBody.appendChild(div);
+    termBody.scrollTop = termBody.scrollHeight;
+  }
+
   const JOKES = [
     'Why do programmers prefer dark mode? Because light attracts bugs.',
     'A SQL query walks into a bar, walks up to two tables and asks: "Can I join you?"',
@@ -503,7 +520,7 @@
     addLine('utility:', 'out cream');
     ['theme', 'banner', 'date', 'history', 'ls', 'clear'].forEach(c => addLine('  ' + c, 'out dim'));
     addLine('fun:', 'out cream');
-    ['sudo', 'matrix', 'coffee', 'joke', 'konami'].forEach(c => addLine('  ' + c, 'out dim'));
+    ['sudo', 'matrix', 'coffee', 'photo', 'joke', 'konami'].forEach(c => addLine('  ' + c, 'out dim'));
   }
 
   function printWhoami(){
@@ -541,6 +558,7 @@
       case 'sudo': printSudo(); break;
       case 'matrix': printMatrix(); break;
       case 'coffee': printCoffee(); break;
+      case 'photo': printPhoto(); break;
       case 'joke': printJoke(); break;
       case 'konami': printKonami(); break;
       case 'clear':
