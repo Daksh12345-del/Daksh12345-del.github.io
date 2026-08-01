@@ -231,7 +231,14 @@
       }
 
       let current = 0;
-      for(let i = days.length - 1; i >= 0; i--){
+      let startIdx = days.length - 1;
+      // If today has no contributions yet, don't let it zero out the streak —
+      // start counting from yesterday instead.
+      const todayStr = new Date().toISOString().slice(0, 10);
+      if(days[startIdx] && days[startIdx].date === todayStr && days[startIdx].count === 0){
+        startIdx--;
+      }
+      for(let i = startIdx; i >= 0; i--){
         if(days[i].count > 0) current++;
         else break;
       }
