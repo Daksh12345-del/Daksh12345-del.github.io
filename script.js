@@ -208,6 +208,53 @@
   }
 
   // ---------- live GitHub stats ----------
+  async function loadStatsFromBakedFile(){
+    // Same-origin file generated daily by .github/workflows/update-stats.yml
+    // via GitHub's official GraphQL API. Streaks are pre-computed server-side,
+    // so there's no client-side timezone/"today not finished" bug possible.
+    const res = await fetch('data/contributions.json', { cache: 'no-store' });
+    if(!res.ok) throw new Error('no baked stats file (status ' + res.status + ')');
+    const data = await res.json();
+    if(!data || !Array.isArray(data.days)) throw new Error('malformed stats file');
+
+    CONTRIB_DAYS = data.days;
+    document.getElementById('statContrib').textContent = (data.total_contributions ?? 0).toLocaleString();
+    document.getElementById('statStreak').textContent = data.current_streak?.length ?? 0;
+    document.getElementById('statBest').textContent = data.longest_streak?.length ?? 0;
+    console.log('[stats] loaded from data/contributions.json — generated_at:', data.generated_at, '| current streak:', data.current_streak, '| longest streak:', data.longest_streak);
+  }
+
+  async function loadStatsLiveFallback(){
+    // Fallback only: unofficial scraper API, computed client-side.
+    const contribRes = await fetch('https://github-contributions-api.jogruber.de/v4/' + USERNAME);
+    const data = await contribRes.json();
+    const days = data.contributions || [];
+    CONTRIB_DAYS = days;
+    const total = days.reduce((s, d) => s + (d.count || 0), 0);
+
+    let best = 0, run = 0;
+    for(const d of days){
+      if(d.count > 0){ run++; best = Math.max(best, run); }
+      else{ run = 0; }
+    }
+
+    let current = 0;
+    let startIdx = days.length - 1;
+    const todayStr = new Date().toISOString().slice(0, 10);
+    while(startIdx >= 0 && days[startIdx].date >= todayStr && days[startIdx].count === 0){
+      startIdx--;
+    }
+    for(let i = startIdx; i >= 0; i--){
+      if(days[i].count > 0) current++;
+      else break;
+    }
+    console.log('[stats] loaded from live fallback API — current streak:', current, '| best streak:', best);
+
+    document.getElementById('statContrib').textContent = total.toLocaleString();
+    document.getElementById('statStreak').textContent = current;
+    document.getElementById('statBest').textContent = best;
+  }
+
   async function loadStats(){
     try{
       const userRes = await fetch('https://api.github.com/users/' + USERNAME);
@@ -218,16 +265,16 @@
     }
 
     try{
-      const contribRes = await fetch('https://github-contributions-api.jogruber.de/v4/' + USERNAME);
-      const data = await contribRes.json();
-      const days = data.contributions || [];
-      CONTRIB_DAYS = days;
-      const total = days.reduce((s, d) => s + (d.count || 0), 0);
-
-      let best = 0, run = 0;
-      for(const d of days){
-        if(d.count > 0){ run++; best = Math.max(best, run); }
-        else{ run = 0; }
+      await loadStatsFromBakedFile();
+    }catch(bakedErr){
+      console.warn('[stats] baked file unavailable, falling back to live API:', bakedErr.message);
+      try{
+        await loadStatsLiveFallback();
+      }catch(e){
+        console.error('[stats] live fallback also failed:', e);
+        document.getElementById('statContrib').textContent = 'n/a';
+        document.getElementById('statStreak').textContent = 'n/a';
+        document.getElementById('statBest').textContent = 'n/a';
       }
 
       let current = 0;

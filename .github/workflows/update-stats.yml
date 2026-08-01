@@ -1,0 +1,34 @@
+name: Update contribution stats
+
+on:
+  schedule:
+    # 23:50 UTC = 05:20 AM IST (next day) — runs late so the day's
+    # commits are already captured. Adjust if you want it earlier/later.
+    - cron: "50 23 * * *"
+  workflow_dispatch: {}   # lets you trigger it manually from the Actions tab
+
+permissions:
+  contents: write
+
+jobs:
+  update-stats:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Generate contributions.json
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node scripts/generate-stats.mjs
+
+      - name: Commit if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/contributions.json
+          git diff --cached --quiet || git commit -m "chore: update contribution stats [skip ci]"
+          git push
