@@ -276,29 +276,6 @@
         document.getElementById('statStreak').textContent = 'n/a';
         document.getElementById('statBest').textContent = 'n/a';
       }
-
-      let current = 0;
-      let startIdx = days.length - 1;
-      // Skip any trailing entries dated today-or-later that still show 0 —
-      // these are "day not finished yet" placeholders, not a broken streak.
-      const todayStr = new Date().toISOString().slice(0, 10);
-      while(startIdx >= 0 && days[startIdx].date >= todayStr && days[startIdx].count === 0){
-        startIdx--;
-      }
-      for(let i = startIdx; i >= 0; i--){
-        if(days[i].count > 0) current++;
-        else break;
-      }
-      console.log('[stats debug] today:', todayStr, '| last 5 days:', days.slice(-5), '| current streak:', current, '| best streak:', best);
-
-      document.getElementById('statContrib').textContent = total.toLocaleString();
-      document.getElementById('statStreak').textContent = current;
-      document.getElementById('statBest').textContent = best;
-    }catch(e){
-      console.error('[stats debug] failed to load contributions:', e);
-      document.getElementById('statContrib').textContent = 'n/a';
-      document.getElementById('statStreak').textContent = 'n/a';
-      document.getElementById('statBest').textContent = 'n/a';
     }
   }
   loadStats();
